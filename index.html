@@ -3,374 +3,379 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#b6e8c5">
-<title>PIXEL SNAKE</title>
+<meta name="theme-color" content="#101820">
+<title>NEON SNAKE — Pixel Game</title>
 
 <style>
 * {
   box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  min-height: 100%;
+:root {
+  --bg: #101820;
+  --panel: #182630;
+  --green: #70f58b;
+  --green-dark: #23864b;
+  --white: #e9f4ee;
+  --muted: #8da49a;
+  --red: #ff4b55;
 }
 
 body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--white);
   font-family: "Courier New", monospace;
-  background: #b6e8c5;
-  color: #164b35;
+  background: var(--bg);
 }
 
-.menu {
+.page {
   min-height: 100svh;
-  padding: 28px 16px;
+  overflow: hidden;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-  position: relative;
-
-  background-color: #b6e8c5;
-  background-image:
-    linear-gradient(#a3d9b5 2px, transparent 2px),
-    linear-gradient(90deg, #a3d9b5 2px, transparent 2px),
-    radial-gradient(ellipse at center, #e0f8d9, #a4ddb9 75%);
+  padding: 28px 18px;
+  background:
+    linear-gradient(#ffffff08 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff08 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 40%, #1d3c36, #101820 72%);
   background-size: 24px 24px, 24px 24px, cover;
 }
 
 .content {
-  width: 100%;
-  max-width: 390px;
-  text-align: center;
   position: relative;
-  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
-.brand {
-  font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 4px;
-  color: #397e53;
+.topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 2px;
+  border-bottom: 2px solid #33483f;
+  padding-bottom: 13px;
 }
 
-h1 {
-  font-size: clamp(52px, 15vw, 76px);
-  margin: 15px 0 8px;
+.status {
+  color: var(--green);
+}
+
+.logo {
+  margin: 30px 0 8px;
+  color: var(--green);
+  font-size: clamp(40px, 12vw, 64px);
+  font-weight: 900;
+  letter-spacing: -2px;
   line-height: 1;
-  color: #238a43;
-  text-shadow: 4px 4px #91d77d, 7px 7px #498f56;
-  letter-spacing: 3px;
+  text-shadow: 4px 4px #23683e;
 }
 
 .subtitle {
   font-size: 11px;
   letter-spacing: 3px;
-  color: #397e53;
+  color: #a8bdb2;
 }
 
-/* Пиксельный лес */
-.scenery {
-  height: 55px;
-  margin: 8px auto -3px;
+/* Игровая пиксельная сцена */
+.game {
   position: relative;
-  max-width: 320px;
-  opacity: .8;
+  margin: 30px auto 24px;
+  width: 100%;
+  max-width: 350px;
+  height: 235px;
+  overflow: hidden;
+  border: 4px solid #466455;
+  background-color: #a4d7a5;
+  background-image:
+    linear-gradient(#79b98766 2px, transparent 2px),
+    linear-gradient(90deg, #79b98766 2px, transparent 2px);
+  background-size: 20px 20px;
+  box-shadow: 8px 8px 0 #090e12;
 }
 
+/* Дальние деревья */
 .tree {
   position: absolute;
-  bottom: 0;
-  width: 14px;
-  height: 34px;
-  background: #8bbd76;
-  border: 3px solid #579568;
+  bottom: 72px;
+  width: 12px;
+  height: 45px;
+  background: #6c9e69;
+  box-shadow: 0 0 0 4px #6c9e69;
 }
 
 .tree::before {
   content: "";
   position: absolute;
-  width: 35px;
-  height: 22px;
-  left: -13px;
-  top: -16px;
-  background: #79c58a;
-  border: 3px solid #579568;
-  box-shadow: 0 -13px 0 -3px #79c58a;
-}
-
-.tree.one { left: 30px; }
-.tree.two { left: 82px; height: 25px; transform: scale(.8); }
-.tree.three { right: 70px; height: 31px; }
-.tree.four { right: 20px; height: 22px; transform: scale(.8); }
-
-.flower {
-  position: absolute;
-  font-size: 19px;
-  color: #fff9d7;
-}
-.flower.one { left: 65px; top: 0; }
-.flower.two { right: 110px; top: 10px; }
-.flower.three { right: 40px; top: -3px; }
-
-/* Змея */
-.character {
-  width: 280px;
-  height: 270px;
-  max-width: 100%;
-  position: relative;
-  margin: 0 auto 6px;
-}
-
-.segment {
-  position: absolute;
-  width: 43px;
-  height: 43px;
-  background: #32d85a;
-  border: 4px solid #16753b;
-  box-shadow: inset -7px -7px #1ca849;
-}
-
-/* Изгиб тела назад */
-.s1 { left: 30px; top: 170px; }
-.s2 { left: 73px; top: 170px; }
-.s3 { left: 116px; top: 170px; }
-.s4 { left: 159px; top: 170px; }
-.s5 { left: 159px; top: 127px; }
-.s6 { left: 159px; top: 84px; }
-
-.head {
-  position: absolute;
-  left: 65px;
-  top: 17px;
-  width: 150px;
-  height: 139px;
-  background: #45ef66;
-  border: 7px solid #16753b;
+  left: -15px;
+  top: -22px;
+  width: 38px;
+  height: 28px;
+  background: #4b9860;
   box-shadow:
-    inset 8px 0 #8aff89,
-    inset -9px -9px #24b94b,
-    0 7px #438c58;
+    -5px 5px #4b9860,
+    8px -8px #72bd79;
 }
 
-.eye {
+.tree.a { left: 35px; }
+.tree.b { left: 125px; transform: scale(.8); }
+.tree.c { right: 42px; transform: scale(1.1); }
+
+.cloud {
   position: absolute;
-  top: 24px;
-  width: 37px;
-  height: 42px;
-  background: #f4ffd9;
-  border: 5px solid #19733b;
+  top: 26px;
+  left: 38px;
+  width: 34px;
+  height: 10px;
+  background: #e4f2d3;
+  box-shadow:
+    10px -10px #e4f2d3,
+    20px 0 #e4f2d3,
+    10px 10px #e4f2d3;
 }
 
-.eye.left { left: 18px; }
-.eye.right { right: 18px; }
+.cloud.two {
+  left: auto;
+  right: 45px;
+  top: 57px;
+  transform: scale(.7);
+}
 
-.pupil {
+/* Земля */
+.ground {
   position: absolute;
-  width: 14px;
-  height: 21px;
-  left: 6px;
-  top: 7px;
-  background: #103d29;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 35px;
+  background: #557d4c;
+  border-top: 7px solid #70c765;
+  background-image:
+    linear-gradient(90deg, transparent 50%, #416740 50%);
+  background-size: 20px 20px;
 }
 
-.pupil::after {
+/* Змея сбоку, в стиле классических игр */
+.snake-part {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #32cb62;
+  border: 3px solid #176a42;
+  box-shadow: inset -5px -5px #23964b;
+  z-index: 2;
+}
+
+.snake-1 { left: 43px; bottom: 45px; }
+.snake-2 { left: 75px; bottom: 45px; }
+.snake-3 { left: 107px; bottom: 45px; }
+.snake-4 { left: 139px; bottom: 45px; }
+.snake-5 { left: 139px; bottom: 77px; }
+
+.snake-head {
+  position: absolute;
+  z-index: 3;
+  left: 139px;
+  bottom: 109px;
+  width: 38px;
+  height: 38px;
+  background: #48ef73;
+  border: 4px solid #176a42;
+  box-shadow: inset -5px -5px #27a950;
+}
+
+.snake-head::before,
+.snake-head::after {
   content: "";
   position: absolute;
-  width: 5px;
-  height: 5px;
-  left: 2px;
-  top: 2px;
-  background: white;
+  width: 6px;
+  height: 6px;
+  background: #f4ffe5;
+  top: 5px;
 }
 
-.cheek {
+.snake-head::before { left: 4px; }
+.snake-head::after { right: 4px; }
+
+.eye-pupil {
   position: absolute;
-  top: 76px;
-  width: 25px;
-  height: 25px;
-  background: #a3ff83;
-  border: 4px solid #258b47;
+  z-index: 4;
+  top: 7px;
+  left: 8px;
+  width: 4px;
+  height: 7px;
+  background: #173b2b;
+  box-shadow: 12px 0 #173b2b;
 }
 
-.cheek.left { left: -3px; }
-.cheek.right { right: -3px; }
-
-.mouth {
-  position: absolute;
-  left: 33px;
-  top: 83px;
-  width: 70px;
-  height: 25px;
-  background: #12462b;
-  border: 4px solid #20773d;
-}
-
-/* Яркое яблоко перед мордочкой */
+/* Яблоко на игровом поле */
 .apple {
   position: absolute;
-  z-index: 5;
-  left: 121px;
-  top: 116px;
-  width: 42px;
-  height: 39px;
-  background: #ff3049;
-  border: 5px solid #b91835;
-  box-shadow: inset -6px -5px #d91f38;
+  z-index: 3;
+  right: 49px;
+  bottom: 45px;
+  width: 22px;
+  height: 22px;
+  background: var(--red);
+  border: 3px solid #a9253b;
+  box-shadow: inset -4px -4px #d52e42;
 }
 
 .apple::before {
   content: "";
   position: absolute;
-  left: 14px;
-  top: -17px;
-  width: 7px;
-  height: 14px;
-  background: #85502d;
-  border: 2px solid #5a7932;
+  width: 5px;
+  height: 8px;
+  top: -9px;
+  left: 8px;
+  background: #287647;
 }
 
 .apple::after {
   content: "";
   position: absolute;
-  left: 19px;
-  top: -12px;
-  width: 13px;
-  height: 8px;
-  background: #64e95d;
-  border: 2px solid #27843e;
+  top: -7px;
+  left: 12px;
+  width: 8px;
+  height: 4px;
+  background: #69df7b;
 }
 
-.spark {
+.hud {
   position: absolute;
-  color: #fff7a6;
-  font-size: 23px;
-  text-shadow: 2px 2px #83bd78;
+  z-index: 5;
+  top: 10px;
+  left: 10px;
+  padding: 8px 10px;
+  background: #172a25;
+  border: 2px solid #47745a;
+  color: #d7f8d5;
+  font-size: 11px;
+  font-weight: bold;
 }
 
-.spark.a { left: 18px; top: 20px; }
-.spark.b { right: 15px; top: 65px; }
-.spark.c { left: 20px; bottom: 25px; }
-.spark.d { right: 16px; bottom: 34px; }
+.hud span {
+  color: #ff646b;
+}
 
-.mode {
-  margin: 10px 0 20px;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: #397e53;
+/* Нижнее меню */
+.section-label {
+  margin-bottom: 15px;
+  color: #93b7a0;
+  font-size: 10px;
+  letter-spacing: 3px;
 }
 
 .buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  display: grid;
+  gap: 13px;
   width: 100%;
-  max-width: 300px;
+  max-width: 310px;
   margin: auto;
 }
 
 button {
-  height: 62px;
+  min-height: 58px;
   width: 100%;
-  border: 4px solid #207a43;
+  border: 3px solid #a0ffad;
   border-radius: 0;
-  background: #48e66b;
-  color: #104329;
-  font-family: "Courier New", monospace;
-  font-size: 16px;
+  background: var(--green);
+  color: #10271a;
+  font-family: inherit;
+  font-size: 15px;
   font-weight: 900;
   letter-spacing: 2px;
-  box-shadow: inset 4px 4px #a4ff9a, 0 7px #398650;
+  box-shadow: 5px 5px 0 #286541;
   cursor: pointer;
 }
 
 button.secondary {
-  background: #e0f8d9;
-  color: #247543;
-  border-color: #63ae78;
-  box-shadow: inset -4px -4px #b1dbad, 0 7px #7caf87;
+  background: #192b30;
+  border-color: #4f7863;
+  color: #c4e5ce;
+  box-shadow: 5px 5px 0 #0a1116;
 }
 
 button:active {
-  transform: translateY(4px);
-  box-shadow: none;
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 #286541;
 }
 
 .footer {
   margin-top: 28px;
+  padding-top: 15px;
+  border-top: 2px solid #2b4038;
+  color: #789286;
   font-size: 10px;
   line-height: 2;
   letter-spacing: 2px;
-  color: #4d9060;
 }
 
-.version {
-  color: #619e70;
-  margin-top: 6px;
+.footer strong {
+  color: var(--green);
 }
 
-@media (max-height: 760px) {
-  .menu { padding-top: 16px; padding-bottom: 16px; }
-  h1 { margin-top: 10px; }
-  .character { transform: scale(.86); margin-top: -8px; margin-bottom: -16px; }
-  .scenery { height: 35px; }
+@media (max-height: 740px) {
+  .page { padding-top: 18px; padding-bottom: 18px; }
+  .logo { margin-top: 20px; }
+  .game { margin-top: 20px; margin-bottom: 20px; }
   .footer { margin-top: 20px; }
 }
 </style>
 </head>
 
 <body>
-<div class="menu">
+<div class="page">
   <main class="content">
 
-    <div class="brand">◆ PIXEL ARCADE ◆</div>
-    <h1>SNAKE</h1>
-    <div class="subtitle">THE CLASSIC GAME</div>
-
-    <div class="scenery">
-      <div class="tree one"></div>
-      <div class="tree two"></div>
-      <div class="tree three"></div>
-      <div class="tree four"></div>
-      <span class="flower one">✿</span>
-      <span class="flower two">✦</span>
-      <span class="flower three">✿</span>
+    <div class="topline">
+      <span>PIXEL STUDIOS</span>
+      <span class="status">● SYSTEM READY</span>
     </div>
 
-    <div class="character">
-      <span class="spark a">✦</span>
-      <span class="spark b">✧</span>
-      <span class="spark c">✦</span>
-      <span class="spark d">✧</span>
+    <h1 class="logo">SNAKE<span style="color:#f5f7e9">.</span></h1>
+    <div class="subtitle">CLASSIC ARCADE EXPERIENCE</div>
 
-      <div class="segment s1"></div>
-      <div class="segment s2"></div>
-      <div class="segment s3"></div>
-      <div class="segment s4"></div>
-      <div class="segment s5"></div>
-      <div class="segment s6"></div>
+    <div class="game">
+      <div class="hud"> <span>♥</span>  SCORE: 010 </div>
 
-      <div class="head">
-        <div class="eye left"><div class="pupil"></div></div>
-        <div class="eye right"><div class="pupil"></div></div>
-        <div class="cheek left"></div>
-        <div class="cheek right"></div>
-        <div class="mouth"></div>
+      <div class="cloud"></div>
+      <div class="cloud two"></div>
+
+      <div class="tree a"></div>
+      <div class="tree b"></div>
+      <div class="tree c"></div>
+
+      <div class="snake-part snake-1"></div>
+      <div class="snake-part snake-2"></div>
+      <div class="snake-part snake-3"></div>
+      <div class="snake-part snake-4"></div>
+      <div class="snake-part snake-5"></div>
+      <div class="snake-head">
+        <div class="eye-pupil"></div>
       </div>
 
       <div class="apple"></div>
+      <div class="ground"></div>
     </div>
 
-    <div class="mode">— ВЫБЕРИ РЕЖИМ —</div>
+    <div class="section-label">— MAIN MENU —</div>
 
     <div class="buttons">
-      <button>▶ ИГРАТЬ</button>
-      <button class="secondary">♙ АККАУНТ</button>
+      <button>▶ &nbsp; PLAY GAME</button>
+      <button class="secondary">▣ &nbsp; PROFILE</button>
     </div>
 
     <div class="footer">
-      ГОТОВ К ИГРЕ?
-      <div class="version">PIXEL WORLD · VERSION 0.3</div>
+      BUILT FOR THE <strong>PIXEL GENERATION</strong>
+      <br>
+      VERSION 1.0.0 · 2026
     </div>
 
   </main>
