@@ -3,194 +3,300 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#071009">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07100b">
 <title>PIXEL SNAKE</title>
 
 <style>
-html {
-  background: #071009 !important;
-  color-scheme: dark;
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: #07100b;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  background: #071009 !important;
-  color: #a5ff69;
-  font-family: monospace;
-}
-
-* {
-  box-sizing: border-box;
+  color: #b5ff8a;
+  font-family: "Courier New", monospace;
+  image-rendering: pixelated;
 }
 
 .menu {
-  position: relative;
   min-height: 100vh;
   width: 100%;
-  padding: 30px 20px;
+  padding: 30px 18px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   overflow: hidden;
-  background-color: #071009 !important;
+  position: relative;
+  background-color: #08130b;
   background-image:
-    linear-gradient(#193b22 1px, transparent 1px),
-    linear-gradient(90deg, #193b22 1px, transparent 1px) !important;
-  background-size: 20px 20px !important;
+    linear-gradient(#193b24 1px, transparent 1px),
+    linear-gradient(90deg, #193b24 1px, transparent 1px);
+  background-size: 16px 16px;
 }
 
 .menu::before {
   content: "";
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background: radial-gradient(
     ellipse at center,
-    #214d29 0%,
-    #0b1b0f 55%,
-    #050906 100%
+    #1b4825 0%,
+    #0b1c10 58%,
+    #040805 100%
   );
-  opacity: .88;
-  pointer-events: none;
 }
 
 .content {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 380px;
+  max-width: 390px;
   text-align: center;
 }
 
-.small {
-  color: #82b78a;
-  font-size: 12px;
+.pixel-text {
+  font-family: "Courier New", monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  -webkit-font-smoothing: none;
+}
+
+.brand {
+  font-size: 11px;
   letter-spacing: 4px;
+  color: #8bbd87;
 }
 
 h1 {
-  font-size: clamp(55px, 15vw, 76px);
-  margin: 22px 0 8px;
+  font-size: clamp(50px, 15vw, 72px);
+  line-height: 1;
+  margin: 20px 0 12px;
   color: #a5ff69;
-  text-shadow: 4px 4px #286332, 8px 8px #102b17;
+  text-shadow:
+    3px 3px 0 #477b32,
+    6px 6px 0 #17371c;
+  letter-spacing: 3px;
 }
 
 .subtitle {
-  font-size: 11px;
-  letter-spacing: 4px;
-  color: #8ab891;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #8eb99a;
 }
 
-.snake {
-  width: 240px;
-  height: 220px;
+/* ПИКСЕЛЬНЫЙ ПЕРСОНАЖ */
+
+.character {
+  width: 256px;
+  height: 270px;
   position: relative;
-  margin: 28px auto;
-  filter: drop-shadow(0 0 12px #5dff6340);
+  margin: 22px auto 12px;
+  filter: drop-shadow(0 0 12px #62ff5b25);
 }
 
-.pixel {
+/* Тело позади головы */
+.body-segment {
   position: absolute;
-  width: 34px;
-  height: 34px;
-  background: #68df58;
-  border: 3px solid #24532b;
-  box-shadow: inset -5px -5px #32853a;
+  width: 38px;
+  height: 38px;
+  background: #42bd48;
+  border: 4px solid #174d27;
+  box-shadow: inset -5px -5px #258b39;
 }
 
-.p2 { left:69px; top:35px; }
-.p3 { left:103px; top:35px; }
-.p4 { left:137px; top:35px; }
-.p5 { left:137px; top:69px; }
-.p6 { left:137px; top:103px; }
-.p7 { left:103px; top:103px; }
-.p8 { left:69px; top:103px; }
-.p9 { left:35px; top:103px; }
-.p10 { left:35px; top:137px; }
+.t1 { left: 35px; top: 187px; }
+.t2 { left: 73px; top: 187px; }
+.t3 { left: 111px; top: 187px; }
+.t4 { left: 149px; top: 187px; }
+.t5 { left: 149px; top: 149px; }
 
-.head {
+/* Большая голова, направленная на зрителя */
+.snake-head {
   position: absolute;
-  left: 35px;
-  top: 35px;
-  width: 34px;
-  height: 34px;
-  background: #a5ff69;
-  border: 3px solid #315c2d;
-  z-index: 2;
+  width: 154px;
+  height: 142px;
+  left: 51px;
+  top: 27px;
+  background: #60df51;
+  border: 8px solid #174a25;
+  box-shadow:
+    inset 9px 0 #85f35f,
+    inset -9px -9px #329d3e,
+    0 7px 0 #102e19;
 }
 
+/* Щёки */
+.cheek {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  top: 75px;
+  background: #91f56b;
+  border: 4px solid #287c35;
+}
+
+.cheek.left { left: -4px; }
+.cheek.right { right: -4px; }
+
+/* Глаза смотрят прямо */
 .eye {
   position: absolute;
-  right: 3px;
-  top: 4px;
-  width: 5px;
-  height: 5px;
-  background: #102515;
+  top: 25px;
+  width: 35px;
+  height: 39px;
+  background: #d8ff9a;
+  border: 5px solid #235b2d;
 }
 
-.eye.second { top: 18px; }
+.eye.left { left: 19px; }
+.eye.right { right: 19px; }
 
+.pupil {
+  position: absolute;
+  width: 14px;
+  height: 20px;
+  left: 6px;
+  top: 8px;
+  background: #102b19;
+}
+
+.pupil::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: white;
+  left: 2px;
+  top: 2px;
+}
+
+/* Рот */
+.mouth {
+  position: absolute;
+  width: 76px;
+  height: 29px;
+  left: 31px;
+  top: 82px;
+  background: #102c19;
+  border: 4px solid #1e632b;
+}
+
+/* Яблоко прямо во рту */
 .apple {
   position: absolute;
-  left: 180px;
-  top: 140px;
-  width: 24px;
-  height: 24px;
-  background: #ff4855;
-  border: 3px solid #a62435;
-  box-shadow: inset -4px -4px #c92d39;
+  z-index: 3;
+  width: 39px;
+  height: 37px;
+  left: 87px;
+  top: 98px;
+  background: #ff4050;
+  border: 5px solid #8b2031;
+  box-shadow: inset -6px -5px #ce293c;
 }
 
 .apple::before {
   content: "";
   position: absolute;
-  width: 5px;
-  height: 8px;
-  background: #a5ff69;
-  top: -9px;
-  left: 8px;
+  left: 13px;
+  top: -14px;
+  width: 7px;
+  height: 12px;
+  background: #9cff65;
+  border: 2px solid #276a30;
 }
 
+.apple::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: -9px;
+  width: 8px;
+  height: 6px;
+  background: #72d956;
+}
+
+/* Пиксельные детали фона */
+.spark {
+  position: absolute;
+  color: #b2ff72;
+  font-size: 22px;
+}
+.spark.a { left: 17px; top: 20px; }
+.spark.b { right: 14px; top: 70px; }
+.spark.c { left: 12px; bottom: 32px; }
+.spark.d { right: 18px; bottom: 48px; }
+
+.mode {
+  color: #76a981;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin: 10px 0 20px;
+}
+
+/* Кнопки */
 .buttons {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 17px;
   width: 100%;
   max-width: 300px;
-  margin: 24px auto 0;
+  margin: auto;
 }
 
 button {
   width: 100%;
-  min-height: 62px;
+  height: 62px;
   border: 0;
   border-radius: 0;
   background: #a5ff69;
-  color: #102413;
-  font: bold 16px monospace;
-  letter-spacing: 3px;
+  color: #102715;
+  font-family: "Courier New", monospace;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 2px;
   box-shadow:
-    inset 4px 4px #d5ffb6,
-    inset -4px -4px #45943a,
-    0 7px #28542d;
+    inset 4px 4px #d9ffb7,
+    inset -5px -5px #469b3c,
+    0 7px #28552e;
+  cursor: pointer;
 }
 
 button.secondary {
-  background: #12251a;
   color: #a5ff82;
-  box-shadow: inset 4px 4px #315b38,
-    inset -4px -4px #09130c,
-    0 7px #020503;
-  outline: 2px solid #47764a;
+  background: #13281a;
+  border: 3px solid #427a46;
+  box-shadow: inset -4px -4px #09130c,
+              0 7px #020503;
+}
+
+button:active {
+  transform: translateY(4px);
 }
 
 .footer {
   margin-top: 30px;
-  color: #6c9672;
+  color: #648b69;
   font-size: 10px;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   line-height: 2;
+}
+
+.version {
+  margin-top: 10px;
+  color: #426647;
+  font-size: 10px;
+}
+
+@media (max-height: 720px) {
+  .menu { padding-top: 18px; padding-bottom: 18px; }
+  h1 { margin-top: 12px; }
+  .character { transform: scale(.82); margin-top: 0; margin-bottom: -12px; }
+  .footer { margin-top: 20px; }
 }
 </style>
 </head>
@@ -198,38 +304,50 @@ button.secondary {
 <body>
 <div class="menu">
   <main class="content">
-    <div class="small">◆ PIXEL ARCADE ◆</div>
-    <h1>SNAKE</h1>
-    <div class="subtitle">THE CLASSIC GAME</div>
 
-    <div class="snake">
-      <div class="pixel p2"></div>
-      <div class="pixel p3"></div>
-      <div class="pixel p4"></div>
-      <div class="pixel p5"></div>
-      <div class="pixel p6"></div>
-      <div class="pixel p7"></div>
-      <div class="pixel p8"></div>
-      <div class="pixel p9"></div>
-      <div class="pixel p10"></div>
+    <div class="brand pixel-text">◆ PIXEL ARCADE ◆</div>
+    <h1 class="pixel-text">SNAKE</h1>
+    <div class="subtitle pixel-text">THE CLASSIC GAME</div>
 
-      <div class="head">
-        <span class="eye"></span>
-        <span class="eye second"></span>
+    <div class="character">
+      <span class="spark a">✦</span>
+      <span class="spark b">✧</span>
+      <span class="spark c">✦</span>
+      <span class="spark d">✧</span>
+
+      <div class="body-segment t1"></div>
+      <div class="body-segment t2"></div>
+      <div class="body-segment t3"></div>
+      <div class="body-segment t4"></div>
+      <div class="body-segment t5"></div>
+
+      <div class="snake-head">
+        <div class="eye left">
+          <div class="pupil"></div>
+        </div>
+        <div class="eye right">
+          <div class="pupil"></div>
+        </div>
+        <div class="cheek left"></div>
+        <div class="cheek right"></div>
+        <div class="mouth"></div>
       </div>
 
       <div class="apple"></div>
     </div>
+
+    <div class="mode pixel-text">— SELECT YOUR MODE —</div>
 
     <div class="buttons">
       <button>▶ ИГРАТЬ</button>
       <button class="secondary">♙ АККАУНТ</button>
     </div>
 
-    <div class="footer">
-      INSERT COIN TO BEGIN<br>
-      VERSION 0.1
+    <div class="footer pixel-text">
+      INSERT COIN TO BEGIN
+      <div class="version">VERSION 0.2.0</div>
     </div>
+
   </main>
 </div>
 </body>
