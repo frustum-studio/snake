@@ -4,153 +4,234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pixel Snake</title>
+<title>PIXEL SNAKE</title>
+
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#050a07;color:#b5ff91;
- font-family:monospace;
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: #071009;
 }
-.menu{
- min-height:100vh;max-width:430px;margin:auto;
- display:flex;flex-direction:column;align-items:center;
- justify-content:center;padding:30px 22px;
- overflow:hidden;position:relative;
- background-color:#08150b;
- background-image:
- linear-gradient(#24432b 1px,transparent 1px),
- linear-gradient(90deg,#24432b 1px,transparent 1px);
- background-size:20px 20px;
+
+body {
+  color: #a5ff69;
+  font-family: monospace;
 }
-.menu:before{
- content:"";position:absolute;inset:0;
- background:radial-gradient(ellipse,#1d4924aa,#061008 75%);
- pointer-events:none;
+
+.menu {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  position: relative;
+  overflow: hidden;
+
+  background-color: #071009;
+  background-image:
+    linear-gradient(#193b22 1px, transparent 1px),
+    linear-gradient(90deg, #193b22 1px, transparent 1px);
+  background-size: 20px 20px;
 }
-.content{
- position:relative;z-index:1;width:100%;
- display:flex;flex-direction:column;align-items:center;
+
+.menu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(35, 100, 44, 0.5),
+    rgba(7, 16, 9, 0.94) 80%
+  );
 }
-.small{font-size:11px;letter-spacing:5px;color:#6ca878}
-h1{
- font-size:clamp(52px,16vw,76px);margin:18px 0 5px;
- color:#a5ff69;letter-spacing:4px;
- text-shadow:4px 4px #286332,8px 8px #102b17;
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.sub{font-size:10px;letter-spacing:4px;color:#7ea987}
-.art{
- width:260px;height:245px;position:relative;margin:25px 0;
+
+.small {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #7cae83;
 }
-.block{
- position:absolute;width:34px;height:34px;
- background:#68df58;border:3px solid #24532b;
- box-shadow:inset -5px -5px #32853a;
+
+h1 {
+  font-size: clamp(56px, 15vw, 76px);
+  margin: 20px 0 5px;
+  color: #a5ff69;
+  text-shadow: 4px 4px #286332,
+               8px 8px #102b17;
 }
-.b1{left:35px;top:35px}
-.b2{left:69px;top:35px}
-.b3{left:103px;top:35px}
-.b4{left:137px;top:35px}
-.b5{left:137px;top:69px}
-.b6{left:137px;top:103px}
-.b7{left:103px;top:103px}
-.b8{left:69px;top:103px}
-.b9{left:35px;top:103px}
-.b10{left:35px;top:137px}
-.head{
- position:absolute;left:35px;top:35px;
- width:34px;height:34px;background:#a5ff69;
- border:3px solid #315c2d;z-index:2;
+
+.subtitle {
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: #8ab891;
 }
-.eye{
- position:absolute;right:3px;top:4px;
- width:6px;height:6px;background:#102515;
+
+.snake {
+  width: 240px;
+  height: 220px;
+  position: relative;
+  margin: 28px 0;
+  filter: drop-shadow(0 0 12px #5dff6340);
 }
-.eye.e2{top:18px}
-.apple{
- position:absolute;left:180px;top:140px;
- width:24px;height:24px;background:#ff4855;
- border:3px solid #a62435;
- box-shadow:inset -5px -5px #c92d39,0 0 18px #ff334455;
+
+.pixel {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  background: #68df58;
+  border: 3px solid #24532b;
+  box-shadow: inset -5px -5px #32853a;
 }
-.apple:before{
- content:"";position:absolute;left:8px;top:-9px;
- width:5px;height:8px;background:#9cff65;
+
+.p2 { left:69px; top:35px; }
+.p3 { left:103px; top:35px; }
+.p4 { left:137px; top:35px; }
+.p5 { left:137px; top:69px; }
+.p6 { left:137px; top:103px; }
+.p7 { left:103px; top:103px; }
+.p8 { left:69px; top:103px; }
+.p9 { left:35px; top:103px; }
+.p10 { left:35px; top:137px; }
+
+.head {
+  position: absolute;
+  left: 35px;
+  top: 35px;
+  width: 34px;
+  height: 34px;
+  background: #a5ff69;
+  border: 3px solid #315c2d;
+  z-index: 2;
 }
-.star{position:absolute;color:#b2ff77;font-size:23px}
-.s1{right:25px;top:12px}
-.s2{left:5px;bottom:25px}
-.s3{right:5px;top:100px}
-.label{font-size:10px;letter-spacing:3px;color:#7ba884}
-.buttons{
- width:100%;max-width:300px;
- display:flex;flex-direction:column;gap:18px;margin-top:22px;
+
+.eye {
+  position: absolute;
+  right: 3px;
+  top: 4px;
+  width: 5px;
+  height: 5px;
+  background: #102515;
 }
-button{
- height:62px;width:100%;border:0;border-radius:0;
- background:#a5ff69;color:#102413;
- font:bold 16px monospace;letter-spacing:3px;
- cursor:pointer;
- box-shadow:inset 4px 4px #d5ffb6,
- inset -4px -4px #45943a,0 7px #28542d;
- clip-path:polygon(6px 0,calc(100% - 6px) 0,
- 100% 6px,100% calc(100% - 6px),
- calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);
+
+.eye.second { top: 18px; }
+
+.apple {
+  position: absolute;
+  left: 180px;
+  top: 140px;
+  width: 24px;
+  height: 24px;
+  background: #ff4855;
+  border: 3px solid #a62435;
+  box-shadow: inset -4px -4px #c92d39;
 }
-button.secondary{
- background:#12251a;color:#a5ff82;
- box-shadow:inset 4px 4px #315b38,
- inset -4px -4px #09130c,0 7px #020503;
+
+.apple::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 8px;
+  background: #a5ff69;
+  top: -9px;
+  left: 8px;
 }
-button:active{transform:translateY(5px)}
-.footer{
- margin-top:32px;color:#54765b;
- font-size:10px;letter-spacing:3px;text-align:center;
- line-height:2;
+
+.buttons {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
-.version{font-size:10px;color:#3e6045;margin-top:12px}
+
+button {
+  width: 100%;
+  min-height: 62px;
+  border: 0;
+  border-radius: 0;
+  background: #a5ff69;
+  color: #102413;
+  font: bold 16px monospace;
+  letter-spacing: 3px;
+  cursor: pointer;
+  box-shadow:
+    inset 4px 4px #d5ffb6,
+    inset -4px -4px #45943a,
+    0 7px #28542d;
+}
+
+button.secondary {
+  background: #12251a;
+  color: #a5ff82;
+  border: 2px solid #47764a;
+  box-shadow: inset 4px 4px #315b38,
+              0 7px #020503;
+}
+
+button:active {
+  transform: translateY(4px);
+}
+
+.footer {
+  margin-top: 30px;
+  color: #6c9672;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-align: center;
+  line-height: 2;
+}
 </style>
 </head>
+
 <body>
 <div class="menu">
- <div class="content">
-  <div class="small">◆ PIXEL ARCADE ◆</div>
-  <h1>SNAKE</h1>
-  <div class="sub">THE CLASSIC GAME</div>
+  <main class="content">
+    <div class="small">◆ PIXEL ARCADE ◆</div>
+    <h1>SNAKE</h1>
+    <div class="subtitle">THE CLASSIC GAME</div>
 
-  <div class="art">
-   <span class="star s1">✦</span>
-   <span class="star s2">✧</span>
-   <span class="star s3">✦</span>
+    <div class="snake">
+      <div class="pixel p2"></div>
+      <div class="pixel p3"></div>
+      <div class="pixel p4"></div>
+      <div class="pixel p5"></div>
+      <div class="pixel p6"></div>
+      <div class="pixel p7"></div>
+      <div class="pixel p8"></div>
+      <div class="pixel p9"></div>
+      <div class="pixel p10"></div>
 
-   <div class="block b2"></div>
-   <div class="block b3"></div>
-   <div class="block b4"></div>
-   <div class="block b5"></div>
-   <div class="block b6"></div>
-   <div class="block b7"></div>
-   <div class="block b8"></div>
-   <div class="block b9"></div>
-   <div class="block b10"></div>
+      <div class="head">
+        <span class="eye"></span>
+        <span class="eye second"></span>
+      </div>
 
-   <div class="head">
-    <span class="eye"></span>
-    <span class="eye e2"></span>
-   </div>
-   <div class="apple"></div>
-  </div>
+      <div class="apple"></div>
+    </div>
 
-  <div class="label">— SELECT YOUR MODE —</div>
+    <div class="buttons">
+      <button>▶ ИГРАТЬ</button>
+      <button class="secondary">♙ АККАУНТ</button>
+    </div>
 
-  <div class="buttons">
-   <button>▶ ИГРАТЬ</button>
-   <button class="secondary">♙ АККАУНТ</button>
-  </div>
-
-  <div class="footer">
-   INSERT COIN TO BEGIN
-   <div class="version">VERSION 0.1</div>
-  </div>
- </div>
+    <div class="footer">
+      INSERT COIN TO BEGIN<br>
+      VERSION 0.1
+    </div>
+  </main>
 </div>
 </body>
 </html>
