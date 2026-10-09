@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071009">
+<title>PIXEL SNAKE</title>
+
+<style>
+html {
+  background: #071009 !important;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #071009 !important;
+  color: #a5ff69;
+  font-family: monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.menu {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #071009 !important;
+  background-image:
+    linear-gradient(#193b22 1px, transparent 1px),
+    linear-gradient(90deg, #193b22 1px, transparent 1px) !important;
+  background-size: 20px 20px !important;
+}
+
+.menu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    #214d29 0%,
+    #0b1b0f 55%,
+    #050906 100%
+  );
+  opacity: .88;
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.small {
+  color: #82b78a;
+  font-size: 12px;
+  letter-spacing: 4px;
+}
+
+h1 {
+  font-size: clamp(55px, 15vw, 76px);
+  margin: 22px 0 8px;
+  color: #a5ff69;
+  text-shadow: 4px 4px #286332, 8px 8px #102b17;
+}
+
+.subtitle {
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: #8ab891;
+}
+
+.snake {
+  width: 240px;
+  height: 220px;
+  position: relative;
+  margin: 28px auto;
+  filter: drop-shadow(0 0 12px #5dff6340);
+}
+
+.pixel {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  background: #68df58;
+  border: 3px solid #24532b;
+  box-shadow: inset -5px -5px #32853a;
+}
+
+.p2 { left:69px; top:35px; }
+.p3 { left:103px; top:35px; }
+.p4 { left:137px; top:35px; }
+.p5 { left:137px; top:69px; }
+.p6 { left:137px; top:103px; }
+.p7 { left:103px; top:103px; }
+.p8 { left:69px; top:103px; }
+.p9 { left:35px; top:103px; }
+.p10 { left:35px; top:137px; }
+
+.head {
+  position: absolute;
+  left: 35px;
+  top: 35px;
+  width: 34px;
+  height: 34px;
+  background: #a5ff69;
+  border: 3px solid #315c2d;
+  z-index: 2;
+}
+
+.eye {
+  position: absolute;
+  right: 3px;
+  top: 4px;
+  width: 5px;
+  height: 5px;
+  background: #102515;
+}
+
+.eye.second { top: 18px; }
+
+.apple {
+  position: absolute;
+  left: 180px;
+  top: 140px;
+  width: 24px;
+  height: 24px;
+  background: #ff4855;
+  border: 3px solid #a62435;
+  box-shadow: inset -4px -4px #c92d39;
+}
+
+.apple::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 8px;
+  background: #a5ff69;
+  top: -9px;
+  left: 8px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 300px;
+  margin: 24px auto 0;
+}
+
+button {
+  width: 100%;
+  min-height: 62px;
+  border: 0;
+  border-radius: 0;
+  background: #a5ff69;
+  color: #102413;
+  font: bold 16px monospace;
+  letter-spacing: 3px;
+  box-shadow:
+    inset 4px 4px #d5ffb6,
+    inset -4px -4px #45943a,
+    0 7px #28542d;
+}
+
+button.secondary {
+  background: #12251a;
+  color: #a5ff82;
+  box-shadow: inset 4px 4px #315b38,
+    inset -4px -4px #09130c,
+    0 7px #020503;
+  outline: 2px solid #47764a;
+}
+
+.footer {
+  margin-top: 30px;
+  color: #6c9672;
+  font-size: 10px;
+  letter-spacing: 3px;
+  line-height: 2;
+}
+</style>
+</head>
+
+<body>
+<div class="menu">
+  <main class="content">
+    <div class="small">◆ PIXEL ARCADE ◆</div>
+    <h1>SNAKE</h1>
+    <div class="subtitle">THE CLASSIC GAME</div>
+
+    <div class="snake">
+      <div class="pixel p2"></div>
+      <div class="pixel p3"></div>
+      <div class="pixel p4"></div>
+      <div class="pixel p5"></div>
+      <div class="pixel p6"></div>
+      <div class="pixel p7"></div>
+      <div class="pixel p8"></div>
+      <div class="pixel p9"></div>
+      <div class="pixel p10"></div>
+
+      <div class="head">
+        <span class="eye"></span>
+        <span class="eye second"></span>
+      </div>
+
+      <div class="apple"></div>
+    </div>
+
+    <div class="buttons">
+      <button>▶ ИГРАТЬ</button>
+      <button class="secondary">♙ АККАУНТ</button>
+    </div>
+
+    <div class="footer">
+      INSERT COIN TO BEGIN<br>
+      VERSION 0.1
+    </div>
+  </main>
+</div>
+</body>
+</html>
