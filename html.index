@@ -5,319 +5,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pixel Snake</title>
-
 <style>
-* {
-  box-sizing: border-box;
-  image-rendering: pixelated;
+*{box-sizing:border-box}
+body{
+ margin:0;background:#050a07;color:#b5ff91;
+ font-family:monospace;
 }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: #050b08;
-  color: #d8ffd0;
-  font-family: monospace;
+.menu{
+ min-height:100vh;max-width:430px;margin:auto;
+ display:flex;flex-direction:column;align-items:center;
+ justify-content:center;padding:30px 22px;
+ overflow:hidden;position:relative;
+ background-color:#08150b;
+ background-image:
+ linear-gradient(#24432b 1px,transparent 1px),
+ linear-gradient(90deg,#24432b 1px,transparent 1px);
+ background-size:20px 20px;
 }
-
-.screen {
-  min-height: 100vh;
-  width: 100%;
-  max-width: 440px;
-  margin: auto;
-  padding: 35px 22px 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-
-  background-color: #08130c;
-  background-image:
-    linear-gradient(#173522 1px, transparent 1px),
-    linear-gradient(90deg, #173522 1px, transparent 1px),
-    radial-gradient(ellipse at center, #173b20 0%, #08130c 70%);
-  background-size: 20px 20px, 20px 20px, 100% 100%;
+.menu:before{
+ content:"";position:absolute;inset:0;
+ background:radial-gradient(ellipse,#1d4924aa,#061008 75%);
+ pointer-events:none;
 }
-
-.screen::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0px,
-    transparent 3px,
-    #00000022 4px
-  );
+.content{
+ position:relative;z-index:1;width:100%;
+ display:flex;flex-direction:column;align-items:center;
 }
-
-.content {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+.small{font-size:11px;letter-spacing:5px;color:#6ca878}
+h1{
+ font-size:clamp(52px,16vw,76px);margin:18px 0 5px;
+ color:#a5ff69;letter-spacing:4px;
+ text-shadow:4px 4px #286332,8px 8px #102b17;
 }
-
-.logo-small {
-  color: #75b77c;
-  font-size: 11px;
-  letter-spacing: 5px;
-  margin-bottom: 18px;
+.sub{font-size:10px;letter-spacing:4px;color:#7ea987}
+.art{
+ width:260px;height:245px;position:relative;margin:25px 0;
 }
-
-h1 {
-  margin: 0;
-  font-size: clamp(48px, 15vw, 70px);
-  font-weight: 900;
-  letter-spacing: 3px;
-  color: #a4ff64;
-  text-shadow:
-    4px 4px #326d32,
-    8px 8px #142d1a;
+.block{
+ position:absolute;width:34px;height:34px;
+ background:#68df58;border:3px solid #24532b;
+ box-shadow:inset -5px -5px #32853a;
 }
-
-.subtitle {
-  margin-top: 13px;
-  color: #79a982;
-  font-size: 11px;
-  letter-spacing: 4px;
+.b1{left:35px;top:35px}
+.b2{left:69px;top:35px}
+.b3{left:103px;top:35px}
+.b4{left:137px;top:35px}
+.b5{left:137px;top:69px}
+.b6{left:137px;top:103px}
+.b7{left:103px;top:103px}
+.b8{left:69px;top:103px}
+.b9{left:35px;top:103px}
+.b10{left:35px;top:137px}
+.head{
+ position:absolute;left:35px;top:35px;
+ width:34px;height:34px;background:#a5ff69;
+ border:3px solid #315c2d;z-index:2;
 }
-
-/* ПИКСЕЛЬНАЯ ЗМЕЙКА */
-
-.snake-box {
-  width: 280px;
-  height: 270px;
-  position: relative;
-  margin: 20px 0 15px;
-  display: grid;
-  place-items: center;
+.eye{
+ position:absolute;right:3px;top:4px;
+ width:6px;height:6px;background:#102515;
 }
-
-.snake-art {
-  position: relative;
-  width: 240px;
-  height: 220px;
-  filter: drop-shadow(0 0 12px #63ff6a44);
+.eye.e2{top:18px}
+.apple{
+ position:absolute;left:180px;top:140px;
+ width:24px;height:24px;background:#ff4855;
+ border:3px solid #a62435;
+ box-shadow:inset -5px -5px #c92d39,0 0 18px #ff334455;
 }
-
-.pixel {
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  background: #62dc54;
-  border: 3px solid #193e22;
-  box-shadow: inset -5px -5px #329640;
+.apple:before{
+ content:"";position:absolute;left:8px;top:-9px;
+ width:5px;height:8px;background:#9cff65;
 }
-
-.p1  { left: 35px; top: 35px; }
-.p2  { left: 69px; top: 35px; }
-.p3  { left: 103px; top: 35px; }
-.p4  { left: 137px; top: 35px; }
-.p5  { left: 137px; top: 69px; }
-.p6  { left: 137px; top: 103px; }
-.p7  { left: 103px; top: 103px; }
-.p8  { left: 69px; top: 103px; }
-.p9  { left: 35px; top: 103px; }
-.p10 { left: 35px; top: 137px; }
-
-.snake-head {
-  position: absolute;
-  left: 35px;
-  top: 35px;
-  width: 34px;
-  height: 34px;
-  background: #a4ff64;
-  border: 3px solid #254b23;
-  z-index: 2;
+.star{position:absolute;color:#b2ff77;font-size:23px}
+.s1{right:25px;top:12px}
+.s2{left:5px;bottom:25px}
+.s3{right:5px;top:100px}
+.label{font-size:10px;letter-spacing:3px;color:#7ba884}
+.buttons{
+ width:100%;max-width:300px;
+ display:flex;flex-direction:column;gap:18px;margin-top:22px;
 }
-
-.eye {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #102414;
-  right: 3px;
-  top: 4px;
+button{
+ height:62px;width:100%;border:0;border-radius:0;
+ background:#a5ff69;color:#102413;
+ font:bold 16px monospace;letter-spacing:3px;
+ cursor:pointer;
+ box-shadow:inset 4px 4px #d5ffb6,
+ inset -4px -4px #45943a,0 7px #28542d;
+ clip-path:polygon(6px 0,calc(100% - 6px) 0,
+ 100% 6px,100% calc(100% - 6px),
+ calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);
 }
-
-.eye.second {
-  top: 18px;
+button.secondary{
+ background:#12251a;color:#a5ff82;
+ box-shadow:inset 4px 4px #315b38,
+ inset -4px -4px #09130c,0 7px #020503;
 }
-
-.apple {
-  position: absolute;
-  left: 173px;
-  top: 139px;
-  width: 25px;
-  height: 25px;
-  background: #ff4c55;
-  border: 3px solid #7d202b;
-  box-shadow: inset -5px -5px #cb263c,
-              0 0 18px #ff354455;
+button:active{transform:translateY(5px)}
+.footer{
+ margin-top:32px;color:#54765b;
+ font-size:10px;letter-spacing:3px;text-align:center;
+ line-height:2;
 }
-
-.apple::before {
-  content: "";
-  position: absolute;
-  top: -9px;
-  left: 10px;
-  width: 5px;
-  height: 8px;
-  background: #a5ff64;
-}
-
-.star {
-  position: absolute;
-  color: #a4ff64;
-  font-size: 22px;
-}
-
-.star1 { top: 10px; right: 23px; }
-.star2 { bottom: 20px; left: 14px; }
-.star3 { top: 80px; left: 2px; }
-
-.label {
-  color: #79aa7e;
-  font-size: 10px;
-  letter-spacing: 3px;
-  margin-bottom: 20px;
-}
-
-/* ПИКСЕЛЬНЫЕ КНОПКИ */
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  width: 100%;
-  max-width: 300px;
-}
-
-button {
-  width: 100%;
-  min-height: 62px;
-  border: 0;
-  border-radius: 0;
-  position: relative;
-  background: #9cff65;
-  color: #102414;
-  font-family: monospace;
-  font-size: 16px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  cursor: pointer;
-
-  box-shadow:
-    inset 4px 4px #d1ffad,
-    inset -4px -4px #4c9d3c,
-    0 7px #28532c,
-    0 0 22px #75ff5a22;
-
-  clip-path: polygon(
-    6px 0, calc(100% - 6px) 0,
-    100% 6px, 100% calc(100% - 6px),
-    calc(100% - 6px) 100%, 6px 100%,
-    0 calc(100% - 6px), 0 6px
-  );
-}
-
-button.secondary {
-  color: #a4ff83;
-  background: #14291b;
-  box-shadow:
-    inset 4px 4px #315d38,
-    inset -4px -4px #0b180e,
-    0 7px #030805;
-  outline: 2px solid #3c7442;
-}
-
-button:active {
-  transform: translateY(5px);
-}
-
-.button-icon {
-  margin-right: 10px;
-  font-size: 18px;
-}
-
-.footer {
-  margin-top: 33px;
-  font-size: 10px;
-  color: #52795a;
-  letter-spacing: 3px;
-  text-align: center;
-  line-height: 2;
-}
-
-.version {
-  margin-top: 15px;
-  color: #36563c;
-  font-size: 10px;
-}
-
+.version{font-size:10px;color:#3e6045;margin-top:12px}
 </style>
 </head>
-
 <body>
-<div class="screen">
-  <div class="content">
+<div class="menu">
+ <div class="content">
+  <div class="small">◆ PIXEL ARCADE ◆</div>
+  <h1>SNAKE</h1>
+  <div class="sub">THE CLASSIC GAME</div>
 
-    <div class="logo-small">◆ PIXEL ARCADE ◆</div>
+  <div class="art">
+   <span class="star s1">✦</span>
+   <span class="star s2">✧</span>
+   <span class="star s3">✦</span>
 
-    <h1>SNAKE</h1>
-    <div class="subtitle">THE CLASSIC GAME</div>
+   <div class="block b2"></div>
+   <div class="block b3"></div>
+   <div class="block b4"></div>
+   <div class="block b5"></div>
+   <div class="block b6"></div>
+   <div class="block b7"></div>
+   <div class="block b8"></div>
+   <div class="block b9"></div>
+   <div class="block b10"></div>
 
-    <div class="snake-box">
-      <span class="star star1">✦</span>
-      <span class="star star2">✧</span>
-      <span class="star star3">✦</span>
-
-      <div class="snake-art">
-        <div class="pixel p2"></div>
-        <div class="pixel p3"></div>
-        <div class="pixel p4"></div>
-        <div class="pixel p5"></div>
-        <div class="pixel p6"></div>
-        <div class="pixel p7"></div>
-        <div class="pixel p8"></div>
-        <div class="pixel p9"></div>
-        <div class="pixel p10"></div>
-
-        <div class="snake-head">
-          <span class="eye"></span>
-          <span class="eye second"></span>
-        </div>
-
-        <div class="apple"></div>
-      </div>
-    </div>
-
-    <div class="label">— SELECT YOUR MODE —</div>
-
-    <div class="buttons">
-      <button>
-        <span class="button-icon">▶</span>ИГРАТЬ
-      </button>
-
-      <button class="secondary">
-        <span class="button-icon">▣</span>АККАУНТ
-      </button>
-    </div>
-
-    <div class="footer">
-      INSERT COIN TO START<br>
-      ★ MADE WITH PIXELS ★
-    </div>
-
-    <div class="version">VERSION 0.1.0</div>
-
+   <div class="head">
+    <span class="eye"></span>
+    <span class="eye e2"></span>
+   </div>
+   <div class="apple"></div>
   </div>
+
+  <div class="label">— SELECT YOUR MODE —</div>
+
+  <div class="buttons">
+   <button>▶ ИГРАТЬ</button>
+   <button class="secondary">♙ АККАУНТ</button>
+  </div>
+
+  <div class="footer">
+   INSERT COIN TO BEGIN
+   <div class="version">VERSION 0.1</div>
+  </div>
+ </div>
 </div>
 </body>
 </html>
